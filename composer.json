@@ -1,0 +1,34 @@
+{
+    "name": "ahoysolutions/query-filters",
+    "description": "A Laravel package to filter database queries based on the query string.",
+    "keywords": ["query", "laravel"],
+    "license": "MIT",
+    "require": {
+        "php": "~7.0",
+        "illuminate/http": "^5.4",
+        "illuminate/database": "^5.4",
+        "illuminate/console": "^5.4",
+        "illuminate/support": "^5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.7",
+        "mockery/mockery": "0.9.*",
+        "fzaninotto/faker": "~1.4"  
+    },
+    "autoload": {
+        "psr-4": {
+            "AhoySolutions\\QueryFilters\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ahoy Solutions, LLC",
+            "email": "chris@ahoysolutions.com"
+        }
+    ]
+}

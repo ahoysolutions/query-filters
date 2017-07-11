@@ -1,0 +1,17 @@
+<?php
+
+namespace DummyNamespace;
+
+use AhoySolutions\QueryFilters\QueryFilters;
+
+class DummyClass extends QueryFilters
+{
+	/**
+	 * Registered filters to operate upon.
+	 *
+	 * @var array
+	 */
+	protected $filters = [];
+
+	//
+}
