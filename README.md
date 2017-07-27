@@ -28,7 +28,7 @@ php artisan make:queryfilters PostFilters
 Afterwards, a new query filter class will be added to your ```app/Filters/``` directory.
 
 ### Adding filter methods
-To add a filter method to an filter class, simply add a function to the class, then register the method's name in the ```$filters``` array.  For example, assume you have an incoming request with a query string that looks like ```www.example.com/posts?user=johnsmith&popular```.
+To add a filter method to an filter class, simply add a function to the class. For example, assume you have an incoming request with a query string that looks like ```www.example.com/posts?user=johnsmith&popular```.
 
 Your filters class might then look like this: 
 
@@ -43,19 +43,12 @@ use App\User;
 class PostFilters extends QueryFilters
 {
     /**
-    * Registered filters to operate upon.
-    *
-    * @var array
-    */
-    protected $filters = ['user', 'popular'];
-
-    /**
     * Filter the posts by the given user.
     *
     * @param string $username
     * @return \Illuminate\Database\Eloquent\Builder
     */
-    protected function user(string $username)
+    protected function filterUser(string $username)
     {
         $user = User::where('username', $username)->firstOrFail();
 
@@ -67,7 +60,7 @@ class PostFilters extends QueryFilters
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function popular()
+    protected function filterPopular()
     {
         $this->resetOrderBy();
 
@@ -88,7 +81,7 @@ Imagine your user wants to search based on an array of different tags, for examp
  * @param string $tag
  * @return \Illuminate\Database\Eloquent\Builder
  */
-public function tag(string $tag)
+protected function filterTag(string $tag)
 {
     return $this->builder->whereHas('tags', function ($query) use ($tag) {
        return $query->where('name', $tag);
@@ -110,7 +103,7 @@ You can specify that a field should be sortable by calling `$this->resetOrderBy(
  *
  * @return \Illuminate\Database\Eloquent\Builder
  */
-protected function popular()
+protected function filterPopular()
 {
     $this->resetOrderBy();
 

@@ -3,6 +3,8 @@
 namespace AhoySolutions\QueryFilters;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 abstract class QueryFilters
 {
@@ -19,11 +21,11 @@ abstract class QueryFilters
 	protected $builder;
 
 	/**
-	 * Registered filters to operate upon.
+	 * A list of default filters to call after processing the query filters.
 	 *
 	 * @var array
 	 */
-	protected $filters = [];
+	protected $defaultFilters = [];
 
 	/**
 	 * QueryFilters constructor.
@@ -45,30 +47,32 @@ abstract class QueryFilters
 	{
 		$this->builder = $builder;
 
-		foreach ($this->getFilters() as $filter => $value) {
-			if (method_exists($this, $filter)) {
+		foreach ($this->request->all() as $filter => $value) {
+			$method = 'filter' . Str::studly($filter);
+
+			if (method_exists($this, $method)) {
 				if (is_iterable($value)) {
 					foreach ($value as $item) {
-						$this->$filter($item);
+						$this->$method($item);
 					}
+				} else {
+					$this->$method($value);
 				}
-				else {
-					$this->$filter($value);
-				}
+			}
+			else {
+				$this->missingFilter($filter, $value);
 			}
 		}
 
-		return $this->builder;
-	}
-
-	/**
-	 * Fetch all relevant filters from the request.
-	 *
-	 * @return array
-	 */
-	protected function getFilters()
-	{
-		return array_intersect_key($this->request->all(), array_flip($this->filters));
+		foreach ($this->defaultFilters as $filter)
+		{
+			if (method_exists($this, $filter)) {
+				$this->$filter();
+			}
+			else {
+				$this->missingFilter($filter, $value);
+			}
+		}
 	}
 
 	/**
@@ -81,5 +85,27 @@ abstract class QueryFilters
 		$this->builder->getQuery()->orders = [];
 
 		return $this->builder;
+	}
+
+	/**
+	 * Removes a filter from the default filter list.
+	 *
+	 * @param $filter
+	 */
+	protected function removeDefaultFilter($filter)
+	{
+		$this->defaultFilters = array_diff($this->defaultFilters, (array) $filter);
+	}
+
+	/**
+	 * Called when a filter does not exist, but is being referenced in the query scope.
+	 * For logging, throwing an exception, etc.
+	 *
+	 * @param $filter
+	 * @param $value
+	 */
+	protected function missingFilter($filter, $value)
+	{
+		//
 	}
 }
