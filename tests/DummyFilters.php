@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace AhoySolutions\Tests;
 
 use AhoySolutions\QueryFilters\QueryFilters;
 

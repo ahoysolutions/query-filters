@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace AhoySolutions\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
