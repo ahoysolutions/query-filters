@@ -1,6 +1,6 @@
 <?php
 
-namespace AhoySolutions\Tests;
+namespace AhoySolutions\QueryFilters\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

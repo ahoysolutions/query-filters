@@ -1,6 +1,6 @@
 <?php
 
-namespace AhoySolutions\Tests;
+namespace AhoySolutions\QueryFilters\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
